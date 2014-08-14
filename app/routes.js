@@ -202,6 +202,15 @@ module.exports = function(app, passport) {
 	});
 
 
+    app.get('/upload', function(req, res) {
+        res.render('upload.ejs');
+    });
+
+    app.post('/upload', function(req, res) {
+        console.log("Uploaded: ", req.files);
+        res.redirect('/upload');
+    });
+
 };
 
 // route middleware to ensure user is logged in
