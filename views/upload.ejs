@@ -14,11 +14,19 @@
 	<div class="jumbotron text-center">
 		<h1><span class="fa fa-lock"></span> Upload</h1>
 
+        <% if (auth) { %>
         <form action="upload" method="post" enctype="multipart/form-data">
             <label for="imageUpload">Upload a file:</label>
             <input id="imageUpload" type="file" name="image"/>
             <input type="submit"/>
-        </forM>
+        </form>
+        <% } else { %>
+        <div>
+            Cannot upload unless you are logged in! (add login link).
+            <p>Already have an account? <a href="/login?goto=upload">Login</a></p>
+            <p>Or go <a href="/">home</a>.</p>
+        </div>
+        <% } %>
 	</div>
 
 </div>

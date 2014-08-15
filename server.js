@@ -17,6 +17,7 @@ var session      = require('express-session');
 var configDB = require('./config/database.js');
 
 // configuration ===============================================================
+app.set('loc', __dirname);
 mongoose.connect(configDB.url); // connect to our database
 
 require('./config/passport')(passport); // pass passport for configuration
@@ -47,3 +48,4 @@ try {
 catch (err) {
     console.error('Unable to start server on port ' + port);
 }
+
