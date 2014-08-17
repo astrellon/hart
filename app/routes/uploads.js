@@ -7,7 +7,9 @@ module.exports = function(app, uploadPath) {
     function processUpload(req, res) {
         var origPath = req.files.image.path;
         var base = path.basename(origPath);
-        var dir = app.get('loc') + '/public/uploads';
+
+        // Upload to the users folder.
+        var dir = app.get('loc') + '/public/uploads/' + req.session.passport.user;
 
         function cleanupTemp() {
             fs.unlink(origPath, function(err) {
@@ -25,10 +27,10 @@ module.exports = function(app, uploadPath) {
 
         fs.mkdir(dir, function(err) {
             // If the folder already exists then ignore the error.
-            if (true || err && err.code !== 'EEXIST') {
+            if (err && err.code !== 'EEXIST') {
                 console.log("Error making dir: ", err);
                 cleanupTemp();
-                res.redirect('/upload');
+                res.redirect(uploadPath);
                 return;
             }
             var full = dir + '/' + base ;
@@ -37,7 +39,7 @@ module.exports = function(app, uploadPath) {
                     console.log("Error renaming: ", err);
                     cleanupTemp();
                 }
-                res.redirect('/upload');
+                res.redirect(uploadPath);
             });
         });
     }
