@@ -1,7 +1,5 @@
-var Users = require('./models/user');
-var uploads = require('./routes/uploads');
-
 module.exports = function(app, passport) {
+    var entities = app.get('entities');
 
 // normal routes ===============================================================
 
@@ -24,7 +22,7 @@ module.exports = function(app, passport) {
             req.session.passport.user == req.params.id &&
             req.isAuthenticated();
 
-        Users.findOne({ '_id': req.params.id }, function(err, user) {
+        entities.model.user.findOne({ '_id': req.params.id }, function(err, user) {
             console.info("Found user? ", err, user);
             res.render('profile.ejs', {
                 user : user,
@@ -83,7 +81,8 @@ module.exports = function(app, passport) {
 		});
 	});
 
-    uploads(app, '/upload');
+    entities.routes.upload(app, '/upload');
+    entities.routes.item(app, '/item');
 };
 
 // route middleware to ensure user is logged in

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+    <% include header %>
+</head>
+<body>
+<div class="container">
+<div class="col-sm-6 col-sm-offset-3">
+
+	<h1><span class="fa fa-sign-in"></span> Items</h1>
+
+    <ul>
+    <% for(var i = 0; i < items.length; i++) { %>
+
+        <li><%= items[i] %></li>
+
+    <% } %>
+    </ul>
+
+    <% include footer %>
+
+</div>
+</div>
+</body>
+</html>

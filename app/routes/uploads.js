@@ -3,7 +3,7 @@ var path = require('path');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
-module.exports = function(app, uploadPath) {
+module.exports = function(app, appPath) {
     function processUpload(req, res) {
         var origPath = req.files.image.path;
         var base = path.basename(origPath);
@@ -21,7 +21,7 @@ module.exports = function(app, uploadPath) {
 
         if (!req.isAuthenticated()) {
             cleanupTemp();
-            res.redirect(uploadPath);
+            res.redirect(appPath);
             return;
         }
 
@@ -30,7 +30,7 @@ module.exports = function(app, uploadPath) {
             if (err && err.code !== 'EEXIST') {
                 console.log("Error making dir: ", err);
                 cleanupTemp();
-                res.redirect(uploadPath);
+                res.redirect(appPath);
                 return;
             }
             var full = dir + '/' + base ;
@@ -39,7 +39,7 @@ module.exports = function(app, uploadPath) {
                     console.log("Error renaming: ", err);
                     cleanupTemp();
                 }
-                res.redirect(uploadPath);
+                res.redirect(appPath);
             });
         });
     }
@@ -50,11 +50,11 @@ module.exports = function(app, uploadPath) {
             return next();
         }
 
-        res.redirect(uploadPath);
+        res.redirect(appPath);
     }
 
-    app.post(uploadPath, multipartMiddleware, processUpload);
-    app.get(uploadPath, function(req, res) {
+    app.post(appPath, multipartMiddleware, processUpload);
+    app.get(appPath, function(req, res) {
         res.render('upload.ejs', {
             auth: req.isAuthenticated()
         });

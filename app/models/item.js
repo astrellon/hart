@@ -1,6 +1,5 @@
 // load the things we need
-var mongoose = require('mongoose')
-  , bcrypt   = require('bcrypt-nodejs')
+var mongoose = require('mongoose');
 
 // define the schema for our item model
 var itemSchema = mongoose.Schema({
