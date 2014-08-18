@@ -10,6 +10,13 @@
 	<div class="jumbotron text-center">
 		<h1><span class="fa fa-lock"></span> Upload</h1>
 
+        <% if (errorMessage.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+        <% if (message.length > 0) { %>
+            <div class="alert"><%= message %></div>
+        <% } %>
+
         <% if (auth) { %>
         <form action="upload" method="post" enctype="multipart/form-data">
             <label for="imageUpload">Upload a file:</label>

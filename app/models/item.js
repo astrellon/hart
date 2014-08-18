@@ -6,7 +6,12 @@ var itemSchema = mongoose.Schema({
 
     text: String,
     owner: String,
-    timestamp: Date
+    timestamp: Date,
+
+    uploadedFilename: String,
+    originalFilename: String,
+    filesize: Number,
+    mimeType: String
 
 });
 

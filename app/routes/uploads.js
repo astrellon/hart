@@ -4,8 +4,12 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
 module.exports = function(app, appPath) {
+    var entities = app.get('entities');
     function processUpload(req, res) {
-        var origPath = req.files.image.path;
+
+        var image = req.files.image;
+
+        var origPath = image.path;
         var base = path.basename(origPath);
 
         // Upload to the users folder.
@@ -38,8 +42,33 @@ module.exports = function(app, appPath) {
                 if (err) {
                     console.log("Error renaming: ", err);
                     cleanupTemp();
+
+                    req.flash('uploadErrorMessage', 'Error retrieving uploaded file: ' + err);
+                    res.redirect(appPath);
+                    return;
                 }
-                res.redirect(appPath);
+
+                // Success
+                var newItem = new entities.model.item();
+                newItem.text = 'No description.';
+                newItem.owner = req.session.passport.user.toString();
+                newItem.timestamp = new Date();
+
+                newItem.uploadedFilename = base;
+                newItem.originalFilename = image.name;
+                newItem.filesize = image.size;
+                newItem.mimeType = image.type;
+
+                newItem.save(function(err) {
+                    if (err) {
+                        // Error :(
+                        req.flash('uploadErrorMessage', 'Error saving item to database: ' + err);
+                    }
+                    else {
+                        req.flash('uploadMessage', 'Uploaded successfully.');
+                    }
+                    res.redirect(appPath);
+                })
             });
         });
     }
@@ -56,7 +85,9 @@ module.exports = function(app, appPath) {
     app.post(appPath, multipartMiddleware, processUpload);
     app.get(appPath, function(req, res) {
         res.render('upload.ejs', {
-            auth: req.isAuthenticated()
+            auth: req.isAuthenticated(),
+            message: req.flash('uploadMessage'),
+            errorMessage: req.flash('uploadErrorMessage')
         });
     });
 }
