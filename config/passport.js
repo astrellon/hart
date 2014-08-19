@@ -85,7 +85,8 @@ module.exports = function(app, passport) {
                     // check to see if theres already a user with that email
                     if (user) {
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-                    } else {
+                    }
+                    else {
 
                         console.log("REQ: ", req.body);
                         // create the user
@@ -106,7 +107,8 @@ module.exports = function(app, passport) {
 
                 });
             // if the user is logged in but has no local account...
-            } else if ( !req.user.local.email ) {
+            } 
+            else if ( !req.user.local.email ) {
                 // ...presumably they're trying to connect a local account
                 var user            = req.user;
                 user.local.email    = email;
@@ -117,7 +119,8 @@ module.exports = function(app, passport) {
                         
                     return done(null, user);
                 });
-            } else {
+            } 
+            else {
                 // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
                 return done(null, req.user);
             }

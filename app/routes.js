@@ -5,7 +5,9 @@ module.exports = function(app, passport) {
 
 	// show the home page (will also have our login links)
 	app.get('/', function(req, res) {
-		res.render('index.ejs');
+		res.render('index.ejs', {
+            auth: req.isAuthenticated()
+        });
 	});
 
 	// PROFILE SECTION =========================
@@ -23,7 +25,6 @@ module.exports = function(app, passport) {
             req.isAuthenticated();
 
         entities.model.user.findOne({ '_id': req.params.id }, function(err, user) {
-            console.info("Found user? ", err, user);
             res.render('profile.ejs', {
                 user : user,
                 auth : auth
@@ -37,21 +38,55 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 
+    // Handle goto queries for redirecting after a process completes.
+    function handleGoto(req, res, next) {
+        if (req.query.goto) {
+            var goto = req.query.goto;
+            if (goto.length > 0) {
+                if (goto[0] !== '/') {
+                    goto = '/' + goto;
+                }
+                req.flash('redirectTo', goto);
+            }
+        }
+        next();
+    }
+
     // show the login form
-    app.get('/login', function(req, res) {
+    app.get('/login', handleGoto, function(req, res) {
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
     // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    app.post('/login', function(req, res, next) {
+       passport.authenticate('local-login', function(err, user, info) {
+           if (err) {
+               return next(err);
+           }
+
+           if (!user) {
+               return res.redirect('/login');
+           }
+
+           req.logIn(user, function(err) {
+               if (err) {
+                   return next(err);
+               }
+
+               var gotoRedirect = req.flash('redirectTo');
+               if (gotoRedirect.length > 0) {
+                   return res.redirect(gotoRedirect[0]);
+               }
+               return res.redirect('/profile');
+           });
+       })(req, res, next);
+   });
 
     // show the signup form
     app.get('/signup', function(req, res) {
-        res.render('signup.ejs', { message: req.flash('signupMessage') });
+        res.render('signup.ejs', { 
+            message: req.flash('signupMessage')
+        });
     });
 
     // process the signup form
