@@ -1,0 +1,16 @@
+body {
+    padding-top: 20px;
+}
+
+.item {
+    min-height: 300px;
+
+}
+.item .inner {
+    width: 90%;
+    margin: auto;
+    margin-top: 1em;
+}
+.item img {
+    width: 100%;
+}

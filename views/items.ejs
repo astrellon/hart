@@ -6,33 +6,37 @@
 </head>
 <body>
 <div class="container">
-<div class="col-sm-6 col-sm-offset-3">
+    <div class="">
 
-	<h1><span class="fa fa-sign-in"></span> Items</h1>
+        <h1><span class="fa fa-sign-in"></span> Items</h1>
 
-    <% if (items.length > 0) { %>
-        <ul>
-        <% for(var i = 0; i < items.length; i++) { %>
-            <li>
-                <img src='<%= items[i].loadUrl %>'/>
+        <% if (items.length > 0) { %>
+            <% for(var i = 0; i < items.length; i += 3) { %>
+                <div class='row'>
+                    <% for(var j = 0; j < 3 && i + j < items.length; j++) { %>
+                        <div class='item col-md-4'>
+                            <div class='inner'>
+                                <img src='<%= items[i + j].loadUrl %>'/>
 
-                <div><strong>Text</strong>: 
-                    <% if (items[i].text) { %>
-                        <%= items[i].text %>
-                    <% } else { %>
-                        No text
+                                <div><strong>Text</strong>: 
+                                    <% if (items[i].text) { %>
+                                        <%= items[i].text %>
+                                    <% } else { %>
+                                        No text
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
                     <% } %>
                 </div>
-            </li>
-        <% } %>
-        </ul>
-    <% } else { %>
+            <% } %>
+        <% } else { %>
         <p>No items found for user.</p>
-    <% } %>
+        <% } %>
 
-    <% include footer %>
+        <% include footer %>
 
-</div>
+    </div>
 </div>
 </body>
 </html>
