@@ -10,13 +10,25 @@
 
 	<h1><span class="fa fa-sign-in"></span> Items</h1>
 
-    <ul>
-    <% for(var i = 0; i < items.length; i++) { %>
+    <% if (items.length > 0) { %>
+        <ul>
+        <% for(var i = 0; i < items.length; i++) { %>
+            <li>
+                <img src='<%= items[i].loadUrl %>'/>
 
-        <li><%= items[i] %></li>
-
+                <div><strong>Text</strong>: 
+                    <% if (items[i].text) { %>
+                        <%= items[i].text %>
+                    <% } else { %>
+                        No text
+                    <% } %>
+                </div>
+            </li>
+        <% } %>
+        </ul>
+    <% } else { %>
+        <p>No items found for user.</p>
     <% } %>
-    </ul>
 
     <% include footer %>
 
