@@ -13,6 +13,16 @@
                 <li role='presentation'><a href='/profile' role='menuitem'>Profile</a></li>
                 <li role='presentation'><a href='/upload' role='menuitem'>Upload</a></li>
                 <li role='presentation'><a href='/item' role='menuitem'>Items</a></li>
+
+                <li role='presentation' class='divider'></li>
+                <% if (typeof(user) !== 'undefined') { %>
+                    <li role='presentation'><a href='/logout' role='menuitem'>Logout</a></li>
+                <% } else { %>
+                    <% var goto = ''; %>
+                    <% if (typeof(redirect) === 'string') { goto = '?goto=' + redirect; } %>
+                    <li role='presentation'><a href='/login<%= goto %>' role='menuitem'>Login</a></li>
+                    <li role='presentation'><a href='/signup<%= goto %>' role='menuitem'>Signup</a></li>
+                <% } %>
             </ul>
         </li>
     </ul>

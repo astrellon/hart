@@ -58,44 +58,49 @@ module.exports = function(app, passport) {
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
+    // All the arguments.
+    function processPassport(req, res, next, err, user, success, fail) {
+        if (err) {
+            return next(err);
+        }
+
+        if (!user) {
+            return res.redirect(fail);
+        }
+
+        req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
+            }
+
+            var gotoRedirect = req.flash('redirectTo');
+            if (gotoRedirect.length > 0) {
+                return res.redirect(gotoRedirect[0]);
+            }
+            return res.redirect(success);
+        });
+    }
+
     // process the login form
     app.post('/login', function(req, res, next) {
        passport.authenticate('local-login', function(err, user, info) {
-           if (err) {
-               return next(err);
-           }
-
-           if (!user) {
-               return res.redirect('/login');
-           }
-
-           req.logIn(user, function(err) {
-               if (err) {
-                   return next(err);
-               }
-
-               var gotoRedirect = req.flash('redirectTo');
-               if (gotoRedirect.length > 0) {
-                   return res.redirect(gotoRedirect[0]);
-               }
-               return res.redirect('/profile');
-           });
+           return processPassport(req, res, next, err, user, '/profile', '/login');
        })(req, res, next);
    });
 
     // show the signup form
-    app.get('/signup', function(req, res) {
+    app.get('/signup', handleGoto, function(req, res) {
         res.render('signup.ejs', { 
             message: req.flash('signupMessage')
         });
     });
 
     // process the signup form
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+   app.post('/signup', function(req, res, next) {
+       passport.authenticate('local-signup', function(err, user, info) {
+           return processPassport(req, res, next, err, user, '/profile', '/signup');
+       })(req, res, next);
+   });
 
     // login locally --------------------------------
     app.get('/connect/local', function(req, res) {

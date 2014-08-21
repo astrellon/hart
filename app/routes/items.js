@@ -21,7 +21,8 @@ module.exports = function(app, appPath) {
                 items: items,
                 error: err,
                 auth: auth,
-                user: req.user
+                user: req.user,
+                redirect: 'item'
             });
         })
     }
