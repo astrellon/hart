@@ -5,14 +5,13 @@
     <% include header %>
 </head>
 <body>
+    <% include navbar %>
 <div class="container">
 
 	<div class="page-header text-center">
 		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <% if (auth) { %>
             <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-            <a href="/upload" class="btn btn-default btn-sm">Upload</a>
-            <a href="/item" class="btn btn-default btn-sm">Items</a>
         <% } %>
 	</div>
 

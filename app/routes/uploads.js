@@ -87,7 +87,8 @@ module.exports = function(app, appPath) {
         res.render('upload.ejs', {
             auth: req.isAuthenticated(),
             message: req.flash('uploadMessage'),
-            errorMessage: req.flash('uploadErrorMessage')
+            errorMessage: req.flash('uploadErrorMessage'),
+            user: req.user
         });
     });
 }

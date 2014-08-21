@@ -1,0 +1,20 @@
+<nav class='global-navbar'>
+
+    <% if (typeof(user) !== 'undefined') { %>
+        <span class='user'><%= user.info.name %></span>
+    <% } %>
+    <ul class='nav nav-pulls'>
+        <li class='dropdown'>
+            <a href='#' role='button' data-toggle='dropdown'>
+                Goto <span class="caret"></span>
+            </a>
+            <ul class='dropdown-menu' role='menu'>
+                <li role='presentation'><a href='/' role='menuitem'>Index</a></li>
+                <li role='presentation'><a href='/profile' role='menuitem'>Profile</a></li>
+                <li role='presentation'><a href='/upload' role='menuitem'>Upload</a></li>
+                <li role='presentation'><a href='/item' role='menuitem'>Items</a></li>
+            </ul>
+        </li>
+    </ul>
+
+</nav>

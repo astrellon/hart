@@ -3,7 +3,7 @@ module.exports = function(app, appPath) {
 
     var imageRegex  =/^image/;
 
-    function renderItems(auth, id, res) {
+    function renderItems(auth, id, req, res) {
         entities.model.item.find({ owner: id }, function(err, items) {
             if (items) {
                 for (var i = items.length - 1; i >= 0; i--) {
@@ -20,7 +20,8 @@ module.exports = function(app, appPath) {
             res.render('items.ejs', {
                 items: items,
                 error: err,
-                auth: auth
+                auth: auth,
+                user: req.user
             });
         })
     }
@@ -30,7 +31,7 @@ module.exports = function(app, appPath) {
             return res.redirect('/');
         }
 
-        renderItems(true, req.session.passport.user, res);
+        renderItems(true, req.session.passport.user, req, res);
     });
     app.get(appPath + '/:id', function(req, res) {
         var id = req.params.id;
@@ -40,7 +41,7 @@ module.exports = function(app, appPath) {
             req.isAuthenticated();
 
 
-        renderItems(auth, id, res);
+        renderItems(auth, id, req, res);
     });
 }
 
