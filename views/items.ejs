@@ -3,6 +3,7 @@
 <head>
 	<title>Node Authentication</title>
     <% include header %>
+    <script src='/js/items.js'></script>
 </head>
 <body>
     <% include navbar %>
@@ -20,11 +21,13 @@
                                 <img src='<%= items[i + j].loadUrl %>'/>
 
                                 <div><strong>Text</strong>: 
-                                    <% if (items[i].text) { %>
-                                        <%= items[i].text %>
-                                    <% } else { %>
-                                        No text
-                                    <% } %>
+                                    <span class='editable' for-item='<%= items[i]._id %>' contenteditable='true'>
+                                      <% if (items[i].text) { %>
+                                          <%= items[i].text %>
+                                      <% } else { %>
+                                          No text
+                                      <% } %>
+                                    </span>
                                 </div>
                             </div>
                         </div>
