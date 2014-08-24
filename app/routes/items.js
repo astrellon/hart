@@ -34,7 +34,7 @@ module.exports = function(app, appPath) {
 
         renderItems(true, req.session.passport.user, req, res);
     });
-    app.get(appPath + '/:id', function(req, res) {
+    app.get(appPath + '/user/:id', function(req, res) {
         var id = req.params.id;
         var auth = req.session && 
             req.session.passport && 
@@ -44,5 +44,25 @@ module.exports = function(app, appPath) {
 
         renderItems(auth, id, req, res);
     });
+
+    app.put(appPath + '/:id', function(req, res) {
+        res.status(200);
+        entities.model.item.update({
+            '_id': req.params.id
+        }, req.body).exec(function(err) {
+            res.json({
+                result: err
+            });
+        });
+    });
+
+    function grabItem(req, res, next) {
+        var id = req.params.id;
+        entities.model.item.findOne({'_id': id}, function(err, item) {
+            req.item = item;
+            next();
+        });
+    }
+
 }
 

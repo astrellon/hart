@@ -16,14 +16,15 @@
             <% for(var i = 0; i < items.length; i += 3) { %>
                 <div class='row'>
                     <% for(var j = 0; j < 3 && i + j < items.length; j++) { %>
+                        <% var item = items[i + j]; %>
                         <div class='item col-md-4'>
                             <div class='inner'>
-                                <img src='<%= items[i + j].loadUrl %>'/>
+                                <img src='<%= item.loadUrl %>'/>
 
                                 <div><strong>Text</strong>: 
-                                    <span class='editable' for-item='<%= items[i]._id %>' contenteditable='true'>
+                                    <span class='editable' for-item='<%= item._id %>' contenteditable='true'>
                                       <% if (items[i].text) { %>
-                                          <%= items[i].text %>
+                                          <%- item.text %>
                                       <% } else { %>
                                           No text
                                       <% } %>
